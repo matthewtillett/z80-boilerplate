@@ -32,7 +32,7 @@ set args=%1
 
 if /I "%args%" == "--help" (
 	echo [default]  -debug   : Assemble file to binary as '.bin' for monitoring / debugging in emulator.
-	echo            -release : Assemble file to self executing '.tap' file.
+	echo            -release : Assemble file to load-and-run '.tap' file.
 	echo            -clean   : Deletes all previously built binary files.
 
 	goto :end

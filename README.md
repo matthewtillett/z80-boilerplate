@@ -17,5 +17,5 @@ I have started this boilerplate, which will eventually include lots of routines 
 
 # Build Script (Options)
 * -debug (default) : Assemble file to binary as '.bin' for monitoring / debugging in emulator.
-* -release         : Assemble file to self executing '.tap' file.
+* -release         : Assemble file to load-and-run '.tap' file.
 * -clean           : Deletes all previously built binary files.
