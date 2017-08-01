@@ -50,7 +50,7 @@ fn_PrintAt:
                         ld      a, 22                   ; Print at
                         rst     16                      ;
 
-                        pop    hl                       ; Restore label address
+                        pop     hl                      ; Restore label address
 
                         ld      b, (hl)                 ; Length of string to output
 
