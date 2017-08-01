@@ -20,7 +20,7 @@
 ; Release: pasmo --tapbas myFile.asm myFile.tap
 ;   Debug: pasmo --bin myFile.asm myFile.tap
 ;          Load into emulator (ZX Spin / Load Binary)
-;          Type: Print Usr 32768 (p, CTRL+SHIFT L)
+;          Type: Print Usr 24832 (p, CTRL+SHIFT L)
 ; 
 ; How to assemble (batch file)
 ; ~~~~~~~~~~~~~~~~~~~~~~~~~~~
