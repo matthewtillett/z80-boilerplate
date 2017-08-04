@@ -26,7 +26,7 @@ fn_ClearScreen:
 
 ; Prints a string at a specified screen location
 ; Version       : v1.0
-; Created       : 01/08/2017
+; Created       : 04/08/2017
 ; Author        : Matthew Tillett
 ;
 ; Data Structure: ix+0 : Length of string
@@ -36,21 +36,35 @@ fn_ClearScreen:
 ;
 ; Example
 ;
-;                 ld      hl, _strScore         ; Label address of string structure
-;                 call    fn_PrintAt            ; Call subroutine
-; _strScore:      db      5,0,20,"Score"        ; Label with strings structure
+;                 ld      hl, _strUpper         ; Message address
+;                 call    fn_PrintUpper         ; Call subroutine to print to upper screen (lines 0 - 21)
+;                 ld      hl, _strLower         ; Message address
+;                 call    fn_PrintLower         ; Call subroutine to print to lower screen (lines 0 & 1)
+; _strUpper:      db      5,21,3,"Upper"        ; Message structure
+; _strLower:      db      5,1,3,"Lower"         ; Message structure
 
-fn_PrintAt:
-                        push    hl                      ; Push onto stack label address
+fn_PrintUpper:
+                        push    hl                      ; Push onto stack message address
                                                         ; Calls to $1601 modifies hl
 
                         ld      a, 2                    ; Output to upper screen (0-21)
-                        call    $1601                   ; Open channel
+                        jp      _printAt
+
+
+fn_PrintLower:
+                        push    hl                      ; Push onto stack message address
+                                                        ; Calls to $1601 modifies hl
+
+                        ld      a, 1                    ; Output to upper screen (0-21)
+
+
+_printAt:
+                        call    $1601                   ; Open channel to upper or lower section of screen
 
                         ld      a, 22                   ; Print at
                         rst     16                      ;
 
-                        pop     hl                      ; Restore label address
+                        pop     hl                      ; Restore message address
 
                         ld      b, (hl)                 ; Length of string to output
 
@@ -62,11 +76,11 @@ fn_PrintAt:
                         ld      a, (hl)
                         rst     16
 
-_printLine:
+_printLoop:
                         inc     hl                      ; Loop through characters
                         ld      a, (hl)                 ;
                         rst     16                      ; ..and display
-                        djnz    _printLine              ; Decrease 'b'. If b != 0, do jump to label
+                        djnz    _printLoop              ; Decrease 'b'. If b != 0, do jump to label
 
                         ret
 ; ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
