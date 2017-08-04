@@ -86,6 +86,24 @@ _printLoop:
 ; ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
+; Waits for the spacebar to become pressed
+; Version       : v1.0
+; Created       : 04/08/2017
+; Author        : Matthew Tillett
+;
+; Example
+;
+; LAST_KEY_PRESS          equ     $5C08           ; Address where last keypress stored
+;                 call    fn_WaitForSpace         ; Wait for spacebar to become pressed
+
+fn_WaitForSpace:
+                        ld a, (LAST_KEY_PRESS)          ; Address where last keypress stored
+                        cp 32                           ; Was it the spacebar?
+                        jr nz, fn_WaitForSpace          ; Repeate loop of not
+
+                        ret
+; ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 ; Test function
 ; Version       : v1.0
 ; Created       : 29/07/2014
