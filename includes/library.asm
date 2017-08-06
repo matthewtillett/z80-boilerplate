@@ -130,7 +130,10 @@ _keyPressLoop:          ld      a, (hl)                 ; Get new value of LAST_
 ; Version       : v1.0
 ; Created       : Unknown
 ; Original Auth : Jonathan CauldWell
-; Result        : Random number returned in 'A' register
+; Modified      : Matthew Tillett | 06/08/2017
+;
+; Affected Registers:
+;                 - A : Random number value
 ;
 ; Example
 ; _rand:          call fn_RndNum        ; Grab pseudo random number
