@@ -72,6 +72,9 @@ SCREEN_RAM              equ     $4000   ; $4000 - $57FF (Total Bytes = 6143 + 0)
 ; Colour RAM is from $5800 - $5AFF, total of 767 bytes.
 COLOUR_RAM              equ     $5800   ; $5800 - $5AFF (Total Bytes = 767 + 0)
 
+; Memory address where last key press code is stored
+LAST_KEY_PRESS          equ     $5C08
+
 ; ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ; Constants (Values)
@@ -92,6 +95,16 @@ playerLives:            db      4
                         ;code starts here...
                         call    fn_ClearScreen
 
+                        ; Print and wait for key press
+                        ld      hl, _strPressKey
+                        call    fn_PrintUpper
+                        call    fn_WaitForKeyPress
+
+                        ; Print and wait for key press
+                        ld      hl, _strPressSpace
+                        call    fn_PrintLower
+                        call    fn_WaitForSpace
+
 
 ; ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ; Includes / Unassembled Libs / Binary Assets
@@ -106,7 +119,9 @@ playerLives:            db      4
 ;               ix+2 : AY y position
 ;               ix+3 : String
 
-_strScore:               db      5,1,4, "Score"
+_strScore:              db      5, 1, 4,   "Score"
+_strPressKey:           db      26, 0, 0,  "Press any key to continue."
+_strPressSpace:         db      23, 1, 0,  "Now press SPACE to end."
 
 ; ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ; Data Tables

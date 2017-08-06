@@ -97,12 +97,63 @@ _printLoop:
 ;                 call    fn_WaitForSpace         ; Wait for spacebar to become pressed
 
 fn_WaitForSpace:
-                        ld a, (LAST_KEY_PRESS)          ; Address where last keypress stored
-                        cp 32                           ; Was it the spacebar?
-                        jr nz, fn_WaitForSpace          ; Repeate loop of not
+                        ld      a, (LAST_KEY_PRESS)     ; Address where last keypress stored
+                        cp      32                      ; Was it the spacebar?
+                        jr      nz, fn_WaitForSpace     ; Repeate loop if not
 
                         ret
 ; ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+; Waits for any key to become pressed
+; Version       : v1.0
+; Created       : 06/08/2017
+; Author        : Matthew Tillett
+;
+; Example
+;
+; LAST_KEY_PRESS          equ     $5C08           ; Address where last keypress stored
+;                 call    fn_WaitForKeyPress      ; Wait for spacebar to become pressed
+
+fn_WaitForKeyPress:
+                        ld      hl, LAST_KEY_PRESS      ; Address where last keypress stored
+                        ld      (hl), 0                 ; Set it to null
+_keyPressLoop:          ld      a, (hl)                 ; Get new value of LAST_KEY_PRESS
+                        cp      0                       ; Something other than null?
+                        jr      z, _keyPressLoop        ; Repeate loop if null
+
+                        ret
+; ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+; Generates a pseudo random number (from first 8k of ROM)
+; Version       : v1.0
+; Created       : Unknown
+; Original Auth : Jonathan CauldWell
+; Result        : Random number returned in 'A' register
+;
+; Example
+; _rand:          call fn_RndNum        ; Grab pseudo random number
+;                 and 15                ; Random number must be between 1 and 15
+;                 cp 0                  ; Is it 0
+;                 jp z, _rand           ; ..request next random number if it is
+
+fn_RndNum:
+                        ld      hl, (_rndSeed)          ; Grab seed
+                        ld      a, h                    ; Grab high byte 
+                        and     31                      ; Limit to first 8k or ROM (0x1fff / 8191)
+                        ld      h, a                    ; Store in high byte
+                        ld      a, (hl)                 ; Grab byte stored at address pointed to in HL
+                        inc     hl                      ; Increase seed
+                        ld      (_rndSeed), hl          ; and store back to seed
+                        cp      0                       ; Check random number is not 0
+                        jp      z, fn_RndNum            ; ..loop until random number is not 0 
+                        
+                        ret                             ; Random number returned in 'A'
+
+_rndSeed:               dw 0                            ; 0 to 65535
+; ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 
 ; Test function
 ; Version       : v1.0
