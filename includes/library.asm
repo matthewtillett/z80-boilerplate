@@ -55,7 +55,7 @@ fn_PrintLower:
                         push    hl                      ; Push onto stack message address
                                                         ; Calls to $1601 modifies hl
 
-                        ld      a, 1                    ; Output to upper screen (0-21)
+                        ld      a, 1                    ; Output to lower screen (0-1)
 
 
 _printAt:
@@ -149,8 +149,6 @@ fn_RndNum:
                         ld      a, (hl)                 ; Grab byte stored at address pointed to in HL
                         inc     hl                      ; Increase seed
                         ld      (_rndSeed), hl          ; and store back to seed
-                        cp      0                       ; Check random number is not 0
-                        jp      z, fn_RndNum            ; ..loop until random number is not 0 
                         
                         ret                             ; Random number returned in 'A'
 
